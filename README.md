@@ -27,7 +27,6 @@ This project is a Laravel-based attendance system designed for general use. It f
 2. **Install dependencies**:
    ```bash
    composer install
-   npm install
    ```
 
 3. **Copy the `.env.example` file to `.env`**:
