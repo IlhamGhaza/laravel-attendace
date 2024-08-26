@@ -46,17 +46,16 @@ class DatabaseSeeder extends Seeder
         //data dumy for company
         \App\Models\Company::factory()->create([
             'name' => 'Company 1',
-            'description' => 'Company 1',
-            'address' => 'Jl. Raya jalanjalan No. 1',
-            'phone' => '081234567890',
             'email' => '3v5wL@example.com',
+            'phone' => '081234567890',
             'latitude' => '',
-            'longitude' => '107.6299',
+            'longitude' => '',
             'radius_km' => '0.5',
         ]);
         //call seed
-        // $this->call([
-        //     CompanySeeder::class,
-        // ]);
+        $this->call([
+            AttendaceSeeder::class,
+            PermissionSeeder::class,
+        ]);
     }
 }
