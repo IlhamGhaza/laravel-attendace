@@ -7,6 +7,7 @@ use App\Models\Company;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -34,6 +35,32 @@ class CompanyResource extends Resource
         return $table
             ->columns([
                 //
+                TextColumn::make('name')
+                ->searchable()->toggleable()->sortable(),
+                TextColumn::make('email')
+                ->searchable()->toggleable()->sortable(),
+                TextColumn::make('phone')
+                ->searchable()->toggleable()->sortable(),
+                TextColumn::make('address')
+                ->searchable()->toggleable()->sortable(),
+                TextColumn::make('latitude')
+                ->searchable()->toggleable()->sortable(),
+                TextColumn::make('longitude')
+                ->searchable()->toggleable()->sortable(),
+                TextColumn::make('radius_km')
+                ->searchable()->toggleable()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
