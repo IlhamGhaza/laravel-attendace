@@ -43,6 +43,12 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+        'permissions' => [
+        'driver' => 'local',
+        'root' => storage_path('app/public/permissions'),
+        'url' => env('APP_URL') . '/storage/permissions',
+        'visibility' => 'public',
+        ],
 
         's3' => [
             'driver' => 's3',

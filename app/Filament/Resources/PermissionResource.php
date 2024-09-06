@@ -5,13 +5,17 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PermissionResource\Pages;
 use App\Filament\Resources\PermissionResource\RelationManagers;
 use App\Models\Permission;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Tables\Actions\Action;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 
 class PermissionResource extends Resource
 {
@@ -53,7 +57,13 @@ class PermissionResource extends Resource
                     ->searchable()
                     ->toggleable()
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\TextColumn::make('reason'),
+                Tables\Columns\ImageColumn::make('image')
+                    //disk = 'public/permissions'
+                    ->disk('permissions')
+                    ->getStateUsing(fn ($record) => $record->image ? asset('storage/permissions/' . ltrim($record->image, '/')) : null)
+                    ->toggleable(),
+
                 Tables\Columns\IconColumn::make('is_approved')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -71,10 +81,23 @@ class PermissionResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                 Action::make('approve')
+                ->label('Approve')
+                ->action(function ($record) {
+                    // Ubah status permission menjadi approved
+                    $record->is_approved = 1;
+                    $record->save();
+
+                    // Kirim notifikasi ke user
+                    self::sendNotificationToUser($record->user_id, 'Permission Anda telah disetujui.');
+                })
+                ->requiresConfirmation()
+                ->color('success'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -108,5 +131,20 @@ class PermissionResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+    public static function sendNotificationToUser($userId, $message)
+    {
+        // Dapatkan FCM token user dari tabel 'users'
+        $user = User::find($userId);
+        $token = $user->fcm_token;
+
+        // Kirim notifikasi ke perangkat Android
+        $messaging = app('firebase.messaging');
+        $notification = Notification::create('Status Izin', $message);
+
+        $message = CloudMessage::withTarget('token', $token)
+            ->withNotification($notification);
+
+        $messaging->send($message);
     }
 }
