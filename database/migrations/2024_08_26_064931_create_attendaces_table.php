@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('attendaces', function (Blueprint $table) {
             $table->id();
-             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             //date
             $table->date('date');
             //time_in

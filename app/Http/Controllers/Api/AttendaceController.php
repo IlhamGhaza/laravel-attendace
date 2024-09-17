@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attendace;
 use Illuminate\Http\Request;
 
-class AttendaceController extends Controller
+class AttendanceController extends Controller
 {
     //checkin
     public function checkin(Request $request)
@@ -18,7 +18,7 @@ class AttendaceController extends Controller
         ]);
 
         //save new attendance
-        $attendance = new Attendace();
+        $attendance = new Attendace;
         $attendance->user_id = $request->user()->id;
         $attendance->date = date('Y-m-d');
         $attendance->time_in = date('H:i:s');
