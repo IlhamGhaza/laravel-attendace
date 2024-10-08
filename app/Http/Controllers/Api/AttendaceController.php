@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attendace;
 use Illuminate\Http\Request;
 
-class AttendanceController extends Controller
+class AttendaceController extends Controller
 {
     //checkin
     public function checkin(Request $request)

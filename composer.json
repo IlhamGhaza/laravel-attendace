@@ -8,6 +8,7 @@
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.0",
         "bezhansalleh/filament-shield": "^3.2",
+        "endroid/qr-code": "^5.1",
         "filament/filament": "3.2.57",
         "joaopaulolndev/filament-edit-profile": "^1.0",
         "kreait/laravel-firebase": "^5.9",

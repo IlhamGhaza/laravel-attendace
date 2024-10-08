@@ -12,89 +12,47 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   public function getUserId($id)
     {
-        $users = User::all();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Users retrieved successfully',
-            'data' => $users
-        ], 200);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'phone' => 'required|string',
-            'role' => 'required|string',
-            'position' => 'required|string',
-            'department' => 'required|string',
-            'image_url' => 'nullable|string',
-        ]);
-
-        $validatedData['password'] = Hash::make($validatedData['password']);
-
-        $user = User::create($validatedData);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User created successfully',
-            'data' => $user
-        ], 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User retrieved successfully',
+        $user = User::find($id);
+        return response([
+            'status' => 'Success',
+            'message' => 'User found',
             'data' => $user
         ], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
+    public function updateProfile(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'string|max:255',
-            'email' => 'string|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'string',
-            'role' => 'string',
-            'position' => 'string',
-            'department' => 'string',
-            'image_url' => 'nullable|string',
-        ]);
+        try {
+            $request->validate([
+                'id' => 'required',
+                'name' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required',
+                'image_url' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
 
-        $user->update($validatedData);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User updated successfully',
-            'data' => $user
-        ], 200);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
-        $user->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User deleted successfully',
-        ], 200);
+            $user = User::find($request->id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->phone = $request->phone;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $image_name = time() . '.' . $image->getClientOriginalExtension();
+                $filePath = $image->storeAs('images/users', $image_name, 'public');
+                $user->image_url = $filePath;
+            }
+            $user->save();
+            return response([
+                'status' => 'Success',
+                'message' => 'Update user success',
+                'data' => $user,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response([
+                'message' => $th->getMessage(),
+            ]);
+        }
     }
 }

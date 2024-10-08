@@ -64,8 +64,10 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('department')
                     ->maxLength(255),
                 Forms\Components\Textarea::make('face_embedding')
+                        ->disabled()
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('image_url')
+                        ->disk('public')
                     ->image(),
             ]);
     }
@@ -96,7 +98,8 @@ class UserResource extends Resource
                     ->searchable()->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('department')
                     ->searchable()->sortable()->toggleable(),
-                Tables\Columns\ImageColumn::make('image_url'),
+                Tables\Columns\ImageColumn::make('image_url')
+                ->disk('public'),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
@@ -138,7 +141,7 @@ class UserResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make()->color('success'),
                 ]),
             ]);
     }

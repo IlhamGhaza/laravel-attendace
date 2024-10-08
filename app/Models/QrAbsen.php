@@ -6,19 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Company extends Model
+class QrAbsen extends Model
 {
     use HasFactory,SoftDeletes;
+
     protected $fillable = [
-        'name',
-        'email',
-        'phone',
-        'address',
-        'latitude',
-        'longitude',
-        'radius_km',
-        'time_in',
-        'time_out',
-        'attendance_type'
+        // 'user_id',
+        // 'company_id',
+        'date',
+        'qr_checkin',
+        'qr_checkout',
     ];
 }
