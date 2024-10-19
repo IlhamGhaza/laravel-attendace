@@ -24,6 +24,8 @@ class AttendaceFactory extends Factory
             'time_out' => $this->faker->time(),
             'latlon_in' => $this->faker->latitude() . ',' . $this->faker->longitude(),
             'latlon_out' => $this->faker->latitude() . ',' . $this->faker->longitude(),
+            // 'isLate' => $this->faker->boolean(),
+            // 'isOvertime' => $this->faker->boolean(),
         ];
     }
 }

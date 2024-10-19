@@ -34,14 +34,19 @@ class AttendaceResource extends Resource
                     ->numeric(),
                 Forms\Components\DatePicker::make('date')
                     ->required(),
-                Forms\Components\TextInput::make('time_in')
+                Forms\Components\TimePicker::make('time_in')
+
+                    //set now as default
+                    ->default(now())
                     ->required(),
-                Forms\Components\TextInput::make('time_out'),
+                Forms\Components\TimePicker::make('time_out'),
                 Forms\Components\TextInput::make('latlon_in')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('latlon_out')
                     ->maxLength(255),
+                Forms\Components\Toggle::make('isLate'),
+                Forms\Components\Toggle::make('isOvertime'),
             ]);
     }
 
@@ -70,6 +75,12 @@ class AttendaceResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('latlon_out')
                     ->searchable(),
+                Tables\Columns\IconColumn::make('isLate')
+                    ->label('Late')
+                    ->boolean(),
+                Tables\Columns\IconColumn::make('isOvertime')
+                    ->label('Overtime')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -92,9 +103,9 @@ class AttendaceResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
-                    // Tables\Actions\ForceDeleteBulkAction::make(),
-                    // Tables\Actions\RestoreBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }

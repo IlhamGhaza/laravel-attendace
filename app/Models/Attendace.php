@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Attendace extends Model
 {
     use HasFactory,SoftDeletes;
+
     protected $fillable = [
         'user_id',
         'date',
@@ -16,6 +17,8 @@ class Attendace extends Model
         'time_out',
         'latlon_in',
         'latlon_out',
+        'is_late',
+        'is_overtime',
     ];
 
     public function user()

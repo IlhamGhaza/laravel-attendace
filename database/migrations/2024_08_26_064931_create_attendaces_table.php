@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('latlon_in');
             //latlon_out
             $table->string('latlon_out')->nullable();
+            $table->boolean('is_late')->nullable()->default(false);
+            $table->boolean('is_overtime')->nullable()->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
